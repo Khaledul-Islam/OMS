@@ -15,7 +15,7 @@ public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
         command.CommandText = storedProcedureName;
         command.CommandType = CommandType.StoredProcedure;
 
-        if (command.Connection.State != ConnectionState.Open)
+        if (command.Connection != null && command.Connection.State != ConnectionState.Open)
         {
             await command.Connection.OpenAsync();
         }

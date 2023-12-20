@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OMS.Scheduler;
 using Quartz.Impl;
 using Quartz.Spi;
 using Quartz;
+using OMS.Entity;
 
 namespace OMS.Factory
 {
@@ -18,15 +18,16 @@ namespace OMS.Factory
 
         public static async Task ScheduleJob(IScheduler scheduler, JobSchedule jobSchedule)
         {
-            await scheduler.ScheduleJob(
-                JobBuilder
-                    .Create(jobSchedule.JobType)
-                    .WithIdentity(jobSchedule.JobType.FullName)
-                    .Build(),
-                TriggerBuilder
-                    .Create()
-                    .WithCronSchedule(jobSchedule.CronExpression)
-                    .Build());
+            if (jobSchedule.JobType.FullName != null)
+                await scheduler.ScheduleJob(
+                    JobBuilder
+                        .Create(jobSchedule.JobType)
+                        .WithIdentity(jobSchedule.JobType.FullName)
+                        .Build(),
+                    TriggerBuilder
+                        .Create()
+                        .WithCronSchedule(jobSchedule.CronExpression)
+                        .Build());
         }
     }
 }

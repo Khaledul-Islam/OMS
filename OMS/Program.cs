@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OMS.DbContext;
+using OMS.Entity;
 using OMS.Factory;
 using OMS.Job;
-using OMS.Scheduler;
 using Quartz;
 using Quartz.Spi;
 
@@ -12,21 +12,24 @@ namespace OMS
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var serviceProvider = ConfigureServices();
 
             var scheduler = serviceProvider.GetService<IScheduler>();
             var jobSchedule = serviceProvider.GetService<JobSchedule>();
 
-            await SchedulerService.ScheduleJob(scheduler, jobSchedule);
+            if (scheduler != null && jobSchedule != null)
+            {
+                await SchedulerService.ScheduleJob(scheduler, jobSchedule);
 
-            await scheduler.Start();
+                await scheduler.Start();
 
-            Console.WriteLine("Press any key to close the application");
-            Console.ReadKey();
+                Console.WriteLine("Press any key to close the application");
+                Console.ReadKey();
 
-            await scheduler.Shutdown();
+                await scheduler.Shutdown();
+            }
         }
 
         private static IServiceProvider ConfigureServices()
@@ -42,9 +45,9 @@ namespace OMS
             // Register services
             service.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
             service.AddSingleton<YourJob>();
-            service.AddSingleton(JobScheduleService.CreateJobSchedule<YourJob>(configuration));
+            service.AddSingleton(CreateJobScheduleService.CreateJobSchedule<YourJob>(configuration));
             service.AddSingleton<IJobFactory, JobFactory>();
-            service.AddSingleton(provider => SchedulerService.CreateScheduler(provider));
+            service.AddSingleton(SchedulerService.CreateScheduler);
 
             return service.BuildServiceProvider();
         }

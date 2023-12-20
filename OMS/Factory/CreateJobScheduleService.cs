@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
-using OMS.Factory;
+using OMS.Entity;
 
-namespace OMS.Scheduler
+namespace OMS.Factory
 {
-    public static class JobScheduleService
+    public static class CreateJobScheduleService
     {
         public static JobSchedule CreateJobSchedule<TJob>(IConfiguration configuration)
         {

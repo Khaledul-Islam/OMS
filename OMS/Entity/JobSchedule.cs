@@ -1,4 +1,4 @@
-﻿namespace OMS.Scheduler
+﻿namespace OMS.Entity
 {
     public class JobSchedule
     {
