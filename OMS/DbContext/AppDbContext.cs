@@ -1,15 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OMS.Entity;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 
-namespace OMS.DbContext
+namespace OMS.DbContext;
+
+public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        public DbSet<YourEntity> YourEntities { get; set; }
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public async Task ExecuteStoredProcedureAsync(string storedProcedureName)
+    {
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = storedProcedureName;
+        command.CommandType = CommandType.StoredProcedure;
+
+        if (command.Connection.State != ConnectionState.Open)
         {
-            optionsBuilder.UseSqlServer("your_connection_string_here");
+            await command.Connection.OpenAsync();
         }
+
+        await command.ExecuteNonQueryAsync();
     }
 }

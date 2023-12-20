@@ -1,13 +1,16 @@
 ﻿using Quartz;
+using OMS.DbContext;
 
 namespace OMS.Job
 {
-    public class YourJob : IJob
+    public class YourJob(AppDbContext dbContext) : IJob
     {
         public async Task Execute(IJobExecutionContext context)
         {
             try
             {
+                await dbContext.ExecuteStoredProcedureAsync("YourStoredProcedureName");
+
                 Console.WriteLine("Job executed successfully.");
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OMS.DbContext;
@@ -36,11 +35,13 @@ namespace OMS
                 .AddJsonFile("appsettings.json") // Add appropriate path if needed
                 .Build();
 
+            var connectionString = configuration["ConnectionString:SqlServer"];
+
             var service = new ServiceCollection();
 
             // Register services
+            service.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
             service.AddSingleton<YourJob>();
-            service.AddScoped<AppDbContext>();
             service.AddSingleton(JobScheduleService.CreateJobSchedule<YourJob>(configuration));
             service.AddSingleton<IJobFactory, JobFactory>();
             service.AddSingleton(provider => SchedulerService.CreateScheduler(provider));
