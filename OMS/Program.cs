@@ -43,7 +43,8 @@ namespace OMS
             var service = new ServiceCollection();
 
             // Register services
-            service.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            service.AddDbContext<AppDbContext>(options => 
+                options.UseSqlServer(connectionString));
             service.AddSingleton<YourJob>();
             service.AddSingleton(CreateJobScheduleService.CreateJobSchedule<YourJob>(configuration));
             service.AddSingleton<IJobFactory, JobFactory>();

@@ -9,7 +9,7 @@ namespace OMS.Job
         {
             try
             {
-                await dbContext.ExecuteStoredProcedureAsync("YourStoredProcedureName");
+                await dbContext.ExecuteStoredProcedureAsync("usp_usp_GetEmployees");
 
                 Console.WriteLine("Job executed successfully.");
             }
