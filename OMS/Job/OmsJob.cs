@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using OMS.DbContext;
 using Quartz;
 
-public class YourJob : IJob
+public class OmsJob : IJob
 {
     private readonly AppDbContext _dbContext;
 
-    public YourJob(AppDbContext dbContext)
+    public OmsJob(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -18,7 +18,7 @@ public class YourJob : IJob
         await InsertAndroidOrderIntoProcessTable();
         await TransferAndroidOrderToOMSProcessTable();
         await ProcessCodeConversion();
-        Console.WriteLine("Job executed successfully.");
+        Console.WriteLine("OmsJob executed successfully.");
     }
 
     private async Task InsertAndroidOrderIntoProcessTable()
@@ -192,14 +192,14 @@ public class YourJob : IJob
 public class OMS_OrderInfo_Process
 {
     public int OrderID { get; set; }
-    public string CustID { get; set; }
-    public string MobileNo { get; set; }
-    public string CustPO { get; set; }
-    public string Branch { get; set; }
-    public string BU { get; set; }
-    public string RouteCode { get; set; }
-    public string RouteName { get; set; }
-    public string SalesType { get; set; }
+    public string? CustID { get; set; }
+    public string? MobileNo { get; set; }
+    public string? CustPO { get; set; }
+    public string? Branch { get; set; }
+    public string? BU { get; set; }
+    public string? RouteCode { get; set; }
+    public string? RouteName { get; set; }
+    public string? SalesType { get; set; }
     public int LineCount { get; set; }
     public decimal TotalAmount { get; set; }
     public DateTime OrderDate { get; set; }
